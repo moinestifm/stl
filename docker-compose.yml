@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
   web:
-    build: ./web
+    build: ./docker/web
     container_name: web
     ports:
       - "8080:8080"
