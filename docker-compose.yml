@@ -2,7 +2,7 @@ version: "3.8"
 services:
   tx:
     build: ./docker/tx
-    container_name: deva_tx
+    container_name: tx
     volumes:
       - ./liquidsoap:/opt/deva/liquidsoap
       - ./recordings:/opt/deva/recordings
@@ -15,7 +15,7 @@ services:
 
   rx:
     build: ./docker/rx
-    container_name: deva_rx
+    container_name: rx
     volumes:
       - ./liquidsoap:/opt/deva/liquidsoap
       - ./recordings:/opt/deva/recordings
@@ -27,8 +27,8 @@ services:
     restart: unless-stopped
 
   web:
-    build: ./docker/web
-    container_name: deva_web
+    build: ./web
+    container_name: web
     ports:
       - "8080:8080"
     environment:
