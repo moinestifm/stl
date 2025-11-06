@@ -1,4 +1,4 @@
-# STL — Liquidsoap TX/RX with Web Control (Docker)
+# STL - Liquidsoap TX/RX with Web Control (Docker)
 
 Production-ready prototype for a cross-platform, Dockerized STL (TX/RX) system using Liquidsoap,
 FFmpeg and a lightweight web control panel.
@@ -15,3 +15,9 @@ FFmpeg and a lightweight web control panel.
    ```bash
    git clone https://github.com/moinestifm/stl
    cd stl
+   ```
+2. Build and run!
+   ```bash
+   docker-compose build
+   sudo docker-compose up -d
+   ```
