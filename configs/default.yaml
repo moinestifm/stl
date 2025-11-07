@@ -1,0 +1,13 @@
+P01:
+  url: "http://stream-url:8000/audio.aac"
+  soundcard: "hw:0,0"
+  format: "aac"
+  channels: 2
+  rate: 48000
+
+P02:
+  url: "rtp://239.0.0.1:5004"
+  soundcard: "hw:1,0"
+  format: "mp3"
+  channels: 2
+  rate: 44100
