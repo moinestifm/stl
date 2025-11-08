@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  liquidsoap:
+    build: ./app
+    container_name: liquidsoap_dashboard
+    restart: unless-stopped
+    network_mode: "host"   # PulseAudio works natively
+    volumes:
+      - ./app/config.json:/app/config.json
+      - ./app/static:/app/static
+      - ./app/templates:/app/templates
+    environment:
+      - PULSE_SERVER=unix:/run/user/1000/pulse/native
+      - ADMIN_USER=admin
+      - ADMIN_PASS=changeme

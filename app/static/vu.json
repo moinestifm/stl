@@ -1,0 +1,7 @@
+def export_vu(levels) =
+  open("/app/static/vu.json", "w") do f
+    write(f, "{ \"left\": #{levels.left}, \"right\": #{levels.right} }")
+  end
+end
+
+add_process(radio, fun(s) -> export_vu(get_stereo_level(s)) end)

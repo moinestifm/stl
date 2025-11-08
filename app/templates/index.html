@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DB91RX Style Panel</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='vu_meter.js') }}"></script>
+</head>
+<body>
+<div class="header">
+    <h1>Moinesti FM</h1>
+    <span class="status {{ 'online' if stream_status == 'online' else 'offline' }}">{{ stream_status|upper }}</span>
+</div>
+
+<div class="card-container">
+    <div class="card">
+        <h2>Main Stream</h2>
+        <p>{{ config.main_stream }}</p>
+        <p>Status: <span class="{{ main_active }}">{{ main_active|capitalize }}</span></p>
+    </div>
+    <div class="card">
+        <h2>Backup Stream</h2>
+        <p>{{ config.backup_stream }}</p>
+        <p>Status: <span class="{{ backup_active }}">{{ backup_active|capitalize }}</span></p>
+    </div>
+</div>
+
+<div class="vu-container">
+    <canvas id="vuLeft" width="50" height="200"></canvas>
+    <canvas id="vuRight" width="50" height="200"></canvas>
+</div>
+
+<div class="log-container">
+    <h2>Silence / Stream Logs</h2>
+    <pre id="log">{{ log_content }}</pre>
+</div>
+
+<form method="post" class="config-form">
+    <label>Main Stream URL</label>
+    <input type="text" name="main_stream" value="{{config.main_stream}}">
+    <label>Backup Stream URL</label>
+    <input type="text" name="backup_stream" value="{{config.backup_stream}}">
+    <label>Admin Password</label>
+    <input type="password" name="admin_password" value="{{config.admin_password}}">
+    <button type="submit">Update & Restart</button>
+</form>
+
+<script>
+setInterval(() => {
+    fetch('/vu_levels')
+      .then(r => r.json())
+      .then(data => {
+          drawVUMeter('vuLeft', data.left);
+          drawVUMeter('vuRight', data.right);
+      });
+}, 1000);
+
+setInterval(() => {
+    fetch('/logs')
+      .then(r => r.text())
+      .then(txt => { document.getElementById('log').textContent = txt; });
+}, 5000);
+</script>
+</body>
+</html>

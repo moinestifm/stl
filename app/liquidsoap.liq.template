@@ -1,0 +1,39 @@
+# Liquidsoap template
+set("server.telnet", true)
+set("server.telnet.address", "0.0.0.0")
+set("server.telnet.port", 1234)
+set("server.telnet.password", "{{ADMIN_PASSWORD}}")
+
+main_stream = input.http("{{MAIN_STREAM}}")
+backup_stream = input.http("{{BACKUP_STREAM}}")
+
+radio = fallback(track_sensitive=true, [main_stream, backup_stream])
+radio = normalize(radio)
+radio = stereo(radio)
+radio = limiter(radio)
+
+# PulseAudio output
+output.pulseaudio(radio, device="default")
+
+# Silence detection and logging
+def log_silence(level)
+  if level < -50.0 then
+    log("SILENCE detected at #{date.now()}! Level: #{level} dB")
+  end
+end
+
+add_process(radio, fun(sample) -> log_silence(mean(level_db(sample))) end)
+
+# VU export (for web panel)
+def export_vu(levels) =
+  open("/app/static/vu.json", "w") do f
+    write(f, "{ \"left\": #{levels.left}, \"right\": #{levels.right} }")
+  end
+end
+
+# Dummy function for left/right RMS
+def get_stereo_level(s)
+  {left=0.5, right=0.5} # Replace with actual RMS calculation if needed
+end
+
+add_process(radio, fun(s) -> export_vu(get_stereo_level(s)) end)

@@ -1,0 +1,6 @@
+{
+    "admin_password": "changeme",
+    "main_stream": "http://main-stream-url:8000/stream",
+    "backup_stream": "http://backup-stream-url:8000/stream"
+  }
+  
